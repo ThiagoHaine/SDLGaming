@@ -29,6 +29,10 @@ object *new_object(char *name,sprite *spr){
   return obj;
 }
 
+void destroy_object(object *obj){
+  free(obj);
+}
+
 void step(object *obj,int x,int y){
   if (obj->gravity!=0){
     obj->vspeed+=obj->gravity;

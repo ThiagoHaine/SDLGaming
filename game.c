@@ -29,19 +29,21 @@ int main(){
   add_subimg(player_walk_left,"astronaut/left/2.png");
   //CRIA O OBJETO
   object *player=new_object("player",player_idle_right);
-  object *shot=new_object("shot",spr_shot);
+  object *shot;
+  sceneElement *iShot;
 
   //chao
   //SPRITE
   sprite *spr_block=new_sprite("block.png",1);
   //OBJETO
   object *block[40];
+  sceneElement *iBlock[40];
   for(int i=0;i<40;i++){
   block[i]=new_object("block",spr_block);
   }
-  instantiate(player,room,30,30);
+  sceneElement *iPlayer=instantiate(player,room,30,30);
   for(int i=0;i<20;i++){
-  instantiate(block[i],room,0+(32*i),448);
+  iBlock[i]=instantiate(block[i],room,0+(32*i),448);
   }
   while(1){
   if (playerInGround==false){
@@ -74,7 +76,8 @@ int main(){
       }
       if (sceneEvent(room).key.keysym.sym==SDLK_z){
         if (playerShot==0){
-        instantiate(shot,room,player->x+15,player->y+35);
+        shot=new_object("shot",spr_shot);
+        iShot=instantiate(shot,room,player->x+15,player->y+35);
         switch (playerSide) {
           case 1:
             shot->hspeed=8;
@@ -97,7 +100,9 @@ int main(){
     }
   }
   if (playerShot==1){
-    if (wait(player,100)==true){
+    if (wait(player,50)==true){
+      destroy(iShot,room);
+      destroy_object(shot);
       playerShot=0;
     }
     player->hspeed=0;
