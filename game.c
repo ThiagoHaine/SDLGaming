@@ -10,6 +10,7 @@
 
 int main(){
   scene *room = initScene(640,480);
+  changeBackground("wallpaper.png",room);
   //player
   //VARS
   bool playerInGround=false;
@@ -19,9 +20,9 @@ int main(){
   int playerSide=1;
   //SPRITES
   sprite *player_idle_right=new_sprite("astronaut/right/stand.png",1);
-  sprite *player_walk_right=new_sprite("astronaut/right/1.png",250);
+  sprite *player_walk_right=new_sprite("astronaut/right/1.png",150);
   sprite *player_idle_left=new_sprite("astronaut/left/stand.png",1);
-  sprite *player_walk_left=new_sprite("astronaut/left/1.png",250);
+  sprite *player_walk_left=new_sprite("astronaut/left/1.png",150);
   sprite *player_shot_left=new_sprite("astronaut/left/shot.png",1);
   sprite *player_shot_right=new_sprite("astronaut/right/shot.png",1);
   sprite *spr_shot=new_sprite("astronaut/shot.png",1);
@@ -29,6 +30,7 @@ int main(){
   add_subimg(player_walk_left,"astronaut/left/2.png");
   //CRIA O OBJETO
   object *player=new_object("player",player_idle_right);
+  player->gravity=0.05;
   object *shot;
   sceneElement *iShot;
 
@@ -45,6 +47,9 @@ int main(){
   for(int i=0;i<20;i++){
   iBlock[i]=instantiate(block[i],room,0+(32*i),448);
   }
+  for(int i=0;i<10;i++){
+  iBlock[i+20]=instantiate(block[i+20],room,0+(32*i),250);
+  }  
   while(1){
   if (playerInGround==false){
     player->gravity=0.05;
@@ -56,6 +61,7 @@ int main(){
       return 1;
     }
     if (sceneEvent(room).type==SDL_KEYDOWN){
+      if (playerShot==0){
       if (sceneEvent(room).key.keysym.sym==SDLK_LEFT){
         playerSide=0;
         player->hspeed=-1;
@@ -63,11 +69,11 @@ int main(){
       if (sceneEvent(room).key.keysym.sym==SDLK_RIGHT){
         playerSide=1;
         player->hspeed=1;
-      }
+      }}
       if (sceneEvent(room).key.keysym.sym==SDLK_UP){
         if (playerJump==0 && playerShot==0){
-        player->y-=50;
-        player->vspeed=-3;
+        player->y-=100;
+        player->vspeed=-4;
         if (playerInGround==true){
           playerInGround=false;
         }
@@ -100,7 +106,7 @@ int main(){
     }
   }
   if (playerShot==1){
-    if (wait(player,50)==true){
+    if (wait(player,20)==true){
       destroy(iShot,room);
       destroy_object(shot);
       playerShot=0;
@@ -139,13 +145,18 @@ int main(){
   }
 
 
-  for(int i=0;i<20;i++){
+  for(int i=0;i<30;i++){
     if (collision_check(player,block[i])==true){
+      if (block[i]->y<player->y){
+        player->vspeed=1;
+      }else{
       if(playerInGround==false){
-        playerInGround=true;
         player->vspeed=0;
         playerJump=0;
       }
+      playerInGround=true;}
+    }else{
+      playerInGround=false;
     }
   }
 

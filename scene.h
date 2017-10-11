@@ -3,6 +3,7 @@
 
 typedef struct scene{
 int idmax;
+SDL_Surface * background;
 SDL_Surface * screen;
 SDL_Event event;
 int bufferSize;
@@ -20,6 +21,10 @@ struct sceneElement *prev;
 struct sceneElement *next;
 }sceneElement;
 
+void changeBackground(char * bg_file,scene *scn){
+  scn->background=IMG_Load(bg_file);
+}
+
 scene *initScene(int width,int height){
   SDL_Init(SDL_INIT_VIDEO);
   int flags=IMG_INIT_JPG|IMG_INIT_PNG;
@@ -31,6 +36,7 @@ scene *initScene(int width,int height){
   scene *aux;
   aux=(scene*)malloc(sizeof(scene));
   aux->screen=SDL_SetVideoMode(width, height, 16, SDL_SWSURFACE);
+  aux->background=NULL;
   aux->init=NULL;
   aux->end=NULL;
   aux->idmax=0;
@@ -86,6 +92,9 @@ SDL_Event sceneEvent(scene *scn){
 
 void drawScene(scene *scn){
   SDL_FillRect(scn->screen, NULL, 0x0);
+  if (scn->background!=NULL){
+  SDL_BlitSurface(scn->background, NULL, scn->screen, NULL);
+  }
   if (scn->bufferSize>0){
   sceneElement *aux;
   SDL_Rect posaux;
