@@ -30,7 +30,7 @@ int main(){
   add_subimg(player_walk_left,"sprites/left/2.png");
   //CRIA O OBJETO
   object *player=new_object("player",player_idle_right);
-  player->gravity=0.05;
+  player->gravity=0.1;
   object *shot;
   sceneElement *iShot;
 
@@ -49,10 +49,10 @@ int main(){
   }
   for(int i=0;i<10;i++){
   iBlock[i+20]=instantiate(block[i+20],room,0+(32*i),250);
-  }  
+  }
   while(1){
   if (playerInGround==false){
-    player->gravity=0.05;
+    player->gravity=0.1;
   }else{
     player->gravity=0;
   }
@@ -71,13 +71,13 @@ int main(){
         player->hspeed=1;
       }}
       if (sceneEvent(room).key.keysym.sym==SDLK_UP){
-        if (playerJump==0 && playerShot==0){
-        player->y-=100;
-        player->vspeed=-4;
+        if (playerJump<2 && playerShot==0){
+        //player->y-=100;
+        player->vspeed=-5;
         if (playerInGround==true){
           playerInGround=false;
         }
-        playerJump=1;
+        playerJump++;
         }
       }
       if (sceneEvent(room).key.keysym.sym==SDLK_z){
@@ -106,12 +106,9 @@ int main(){
     }
   }
   if (playerShot==1){
-    if (wait(player,20)==true){
-      destroy(iShot,room);
-      destroy_object(shot);
+    if (wait(player,15)==true){
       playerShot=0;
     }
-    player->hspeed=0;
     switch (playerSide) {
       case 1:
         player->sprite_index=player_shot_right;
@@ -151,7 +148,9 @@ int main(){
         player->vspeed=1;
       }else{
       if(playerInGround==false){
+        if (player->vspeed>0){
         player->vspeed=0;
+        }
         playerJump=0;
       }
       playerInGround=true;}
