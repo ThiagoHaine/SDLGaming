@@ -1,2 +1,0 @@
-gcc -o game game.c -lSDL -lSDL_image
-#./game

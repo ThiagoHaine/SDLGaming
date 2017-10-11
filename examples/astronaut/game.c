@@ -3,9 +3,9 @@
 #include<string.h>
 #include<SDL/SDL.h>
 #include<SDL/SDL_image.h>
-#include "sprite.h"
-#include "object.h"
-#include "scene.h"
+#include "lib/sprite.h"
+#include "lib/object.h"
+#include "lib/scene.h"
 
 
 int main(){
