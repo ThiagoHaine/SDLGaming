@@ -19,15 +19,15 @@ int main(){
   int playerMove=0;
   int playerSide=1;
   //SPRITES
-  sprite *player_idle_right=new_sprite("astronaut/right/stand.png",1);
-  sprite *player_walk_right=new_sprite("astronaut/right/1.png",150);
-  sprite *player_idle_left=new_sprite("astronaut/left/stand.png",1);
-  sprite *player_walk_left=new_sprite("astronaut/left/1.png",150);
-  sprite *player_shot_left=new_sprite("astronaut/left/shot.png",1);
-  sprite *player_shot_right=new_sprite("astronaut/right/shot.png",1);
-  sprite *spr_shot=new_sprite("astronaut/shot.png",1);
-  add_subimg(player_walk_right,"astronaut/right/2.png");
-  add_subimg(player_walk_left,"astronaut/left/2.png");
+  sprite *player_idle_right=new_sprite("sprites/right/stand.png",1);
+  sprite *player_walk_right=new_sprite("sprites/right/1.png",150);
+  sprite *player_idle_left=new_sprite("sprites/left/stand.png",1);
+  sprite *player_walk_left=new_sprite("sprites/left/1.png",150);
+  sprite *player_shot_left=new_sprite("sprites/left/shot.png",1);
+  sprite *player_shot_right=new_sprite("sprites/right/shot.png",1);
+  sprite *spr_shot=new_sprite("sprites/shot.png",1);
+  add_subimg(player_walk_right,"sprites/right/2.png");
+  add_subimg(player_walk_left,"sprites/left/2.png");
   //CRIA O OBJETO
   object *player=new_object("player",player_idle_right);
   player->gravity=0.05;
