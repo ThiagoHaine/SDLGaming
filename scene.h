@@ -4,6 +4,7 @@
 typedef struct scene{
 int idmax;
 SDL_Surface * background;
+bool fixed;
 SDL_Surface * screen;
 SDL_Surface * video;
 SDL_Event event;
@@ -30,8 +31,9 @@ typedef struct camera{
   int h;
 }camera;
 
-void changeBackground(char * bg_file,scene *scn){
+void changeBackground(char * bg_file,bool fix,scene *scn){
   scn->background=IMG_Load(bg_file);
+  scn->fixed=fix;
 }
 
 scene *initScene(int width,int height,int window_width,int window_height){
@@ -47,6 +49,7 @@ scene *initScene(int width,int height,int window_width,int window_height){
   aux->screen=SDL_SetVideoMode(window_width, window_height, 16, SDL_SWSURFACE);
   aux->video=SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
   aux->background=NULL;
+  aux->fixed=false;
   aux->init=NULL;
   aux->end=NULL;
   aux->idmax=0;
@@ -114,8 +117,29 @@ SDL_Event sceneEvent(scene *scn){
 void drawScene(scene *scn,camera *cmr){
   SDL_FillRect(scn->screen, NULL, 0x0);
   SDL_FillRect(scn->video, NULL, 0x0);
+  if (cmr->actor!=NULL){
+    cmr->x=cmr->actor->obj->x-(cmr->w/2);
+    cmr->y=cmr->actor->obj->y-(cmr->h/2);
+  }
+  if (cmr->x<0){
+    cmr->x=0;
+  }
+  if (cmr->y<0){
+    cmr->y=0;
+  }
+  if ((cmr->x+cmr->w)>scn->video->w){
+    cmr->x=scn->video->w-cmr->w;
+  }
+  if ((cmr->y+cmr->h)>scn->video->h){
+    cmr->y=scn->video->h-cmr->h;
+  }
+  SDL_Rect auxrect = {cmr->x,cmr->y,(cmr->w+cmr->x),(cmr->h+cmr->y)};
   if (scn->background!=NULL){
-  SDL_BlitSurface(scn->background, NULL, scn->video, NULL);
+    if (scn->fixed==false){
+      SDL_BlitSurface(scn->background, NULL, scn->video, NULL);
+    }else{
+      SDL_BlitSurface(scn->background, NULL, scn->video, &auxrect);
+    }
   }
   if (scn->bufferSize>0){
   sceneElement *aux;
@@ -140,23 +164,6 @@ void drawScene(scene *scn,camera *cmr){
     }
   }
 }
-  if (cmr->actor!=NULL){
-    cmr->x=cmr->actor->obj->x-(cmr->w/2);
-    cmr->y=cmr->actor->obj->y-(cmr->h/2);
-  }
-  if (cmr->x<0){
-    cmr->x=0;
-  }
-  if (cmr->y<0){
-    cmr->y=0;
-  }
-  if ((cmr->x+cmr->w)>scn->video->w){
-    cmr->x=scn->video->w-cmr->w;
-  }
-  if ((cmr->y+cmr->h)>scn->video->h){
-    cmr->y=scn->video->h-cmr->h;
-  }
-  SDL_Rect auxrect = {cmr->x,cmr->y,(cmr->w+cmr->x),(cmr->h+cmr->y)};
   SDL_BlitSurface(scn->video, &auxrect, scn->screen, NULL);
   SDL_UpdateRect(scn->screen, 0,0,0,0);
   SDL_Delay(1);
