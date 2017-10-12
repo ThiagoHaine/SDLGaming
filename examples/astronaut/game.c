@@ -43,14 +43,15 @@ int main(){
   for(int i=0;i<50;i++){
   block[i]=new_object("block",spr_block);
   }
-  sceneElement *iPlayer=instantiate(player,room,30,30);
-  camera *cmr=newCamera(640,480,iPlayer);
+
   for(int i=0;i<32;i++){
   iBlock[i]=instantiate(block[i],room,0+(32*i),448);
   }
   for(int i=0;i<10;i++){
   iBlock[i+32]=instantiate(block[i+32],room,200+(32*i),250);
   }
+  sceneElement *iPlayer=instantiate(player,room,30,30);
+  camera *cmr=newCamera(640,480,iPlayer);
   while(1){
   if (playerInGround==false){
     player->gravity=0.1;
@@ -145,9 +146,7 @@ int main(){
 
   for(int i=0;i<50;i++){
     if (collision_check(player,block[i])==true){
-      if (block[i]->y<player->y){
-        player->vspeed=1;
-      }else{
+      if (block[i]->y>(player->y+52)){
       if(playerInGround==false){
         if (player->vspeed>0){
         player->vspeed=0;
