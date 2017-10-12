@@ -9,8 +9,8 @@
 
 
 int main(){
-  scene *room = initScene(640,480);
-  changeBackground("wallpaper.png",room);
+  scene *room = initScene(1000,480,640,480);
+  changeBackground("wallpaper.png",true,room);
   //player
   //VARS
   bool playerInGround=false;
@@ -38,17 +38,18 @@ int main(){
   //SPRITE
   sprite *spr_block=new_sprite("block.png",1);
   //OBJETO
-  object *block[40];
-  sceneElement *iBlock[40];
-  for(int i=0;i<40;i++){
+  object *block[50];
+  sceneElement *iBlock[50];
+  for(int i=0;i<50;i++){
   block[i]=new_object("block",spr_block);
   }
   sceneElement *iPlayer=instantiate(player,room,30,30);
-  for(int i=0;i<20;i++){
+  camera *cmr=newCamera(640,480,iPlayer);
+  for(int i=0;i<32;i++){
   iBlock[i]=instantiate(block[i],room,0+(32*i),448);
   }
   for(int i=0;i<10;i++){
-  iBlock[i+20]=instantiate(block[i+20],room,0+(32*i),250);
+  iBlock[i+32]=instantiate(block[i+32],room,200+(32*i),250);
   }
   while(1){
   if (playerInGround==false){
@@ -64,11 +65,11 @@ int main(){
       if (playerShot==0){
       if (sceneEvent(room).key.keysym.sym==SDLK_LEFT){
         playerSide=0;
-        player->hspeed=-1;
+        player->hspeed=-3;
       }
       if (sceneEvent(room).key.keysym.sym==SDLK_RIGHT){
         playerSide=1;
-        player->hspeed=1;
+        player->hspeed=3;
       }}
       if (sceneEvent(room).key.keysym.sym==SDLK_UP){
         if (playerJump<2 && playerShot==0){
@@ -142,7 +143,7 @@ int main(){
   }
 
 
-  for(int i=0;i<30;i++){
+  for(int i=0;i<50;i++){
     if (collision_check(player,block[i])==true){
       if (block[i]->y<player->y){
         player->vspeed=1;
@@ -161,7 +162,7 @@ int main(){
 
 
 
-  drawScene(room);
+  drawScene(room,cmr);
   }
   SDL_Quit();
   return 1;
