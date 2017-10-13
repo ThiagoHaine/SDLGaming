@@ -1,5 +1,65 @@
 #ifndef DICT_H_INCLUDED
 #define DICT_H_INCLUDED
+typedef enum { false, true } bool;
+
+typedef struct object{
+int time;
+float hspeed;
+float gravity;
+struct sprite *sprite_index;
+float vspeed;
+char name[10];
+}object;
+
+typedef struct font{
+TTF_Font *font;
+}font;
+
+typedef struct scene{
+int idmax;
+SDL_Surface * background;
+bool fixed;
+SDL_Surface * screen;
+SDL_Surface * video;
+SDL_Event event;
+int bufferSize;
+struct sceneElement *init;
+struct sceneElement *end;
+}scene;
+
+typedef struct sceneElement{
+int id;
+struct object *obj;
+bool active;
+int x;
+int y;
+struct sceneElement *prev;
+struct sceneElement *next;
+}sceneElement;
+
+typedef struct camera{
+  struct sceneElement *actor;
+  int x;
+  int y;
+  int w;
+  int h;
+}camera;
+
+typedef struct sprite{
+int size;
+int time;
+int speed;
+int sub;
+struct subimg *start;
+struct subimg *last;
+}sprite;
+
+typedef struct subimg{
+SDL_Surface *img;
+struct subimg *prox;
+}subimg;
+
+
 #define keyCheck key.keysym.sym
 #define btnCheck button.button
 

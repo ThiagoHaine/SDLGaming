@@ -1,20 +1,6 @@
 #ifndef SPRITE_H_INCLUDED
 #define SPRITE_H_INCLUDED
 
-typedef struct sprite{
-int size;
-int time;
-int speed;
-int sub;
-struct subimg *start;
-struct subimg *last;
-}sprite;
-
-typedef struct subimg{
-SDL_Surface *img;
-struct subimg *prox;
-}subimg;
-
 sprite *new_sprite(char *img_file,int spd){
   sprite *aux;
   subimg *subaux;

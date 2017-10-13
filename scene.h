@@ -1,36 +1,6 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
 
-typedef struct scene{
-int idmax;
-SDL_Surface * background;
-bool fixed;
-SDL_Surface * screen;
-SDL_Surface * video;
-SDL_Event event;
-int bufferSize;
-struct sceneElement *init;
-struct sceneElement *end;
-}scene;
-
-typedef struct sceneElement{
-int id;
-object *obj;
-bool active;
-int x;
-int y;
-struct sceneElement *prev;
-struct sceneElement *next;
-}sceneElement;
-
-typedef struct camera{
-  sceneElement *actor;
-  int x;
-  int y;
-  int w;
-  int h;
-}camera;
-
 void changeBackground(char * bg_file,bool fix,scene *scn){
   scn->background=IMG_Load(bg_file);
   scn->fixed=fix;
@@ -38,6 +8,7 @@ void changeBackground(char * bg_file,bool fix,scene *scn){
 
 scene *initScene(int width,int height,int window_width,int window_height){
   SDL_Init(SDL_INIT_VIDEO);
+  TTF_Init();
   int flags=IMG_INIT_JPG|IMG_INIT_PNG;
   int initted=IMG_Init(flags);
   if((initted&flags) != flags) {
@@ -114,12 +85,13 @@ SDL_Event sceneEvent(scene *scn){
   return scn->event;
 }
 
-void drawScene(scene *scn,camera *cmr){
+void drawScene(scene *scn,camera *cmr,char *name){
+  SDL_WM_SetCaption(name, name);
   SDL_FillRect(scn->screen, NULL, 0x0);
   SDL_FillRect(scn->video, NULL, 0x0);
   if (cmr->actor!=NULL){
-    cmr->x=cmr->actor->obj->x-(cmr->w/2);
-    cmr->y=cmr->actor->obj->y-(cmr->h/2);
+    cmr->x=cmr->actor->x-(cmr->w/2);
+    cmr->y=cmr->actor->y-(cmr->h/2);
   }
   if (cmr->x<0){
     cmr->x=0;
@@ -148,18 +120,22 @@ void drawScene(scene *scn,camera *cmr){
     if (i==0){
       aux=scn->init;
       if (aux->active==true){
-      step(aux->obj,aux->x,aux->y);
-      posaux.x=aux->obj->x;
-      posaux.y=aux->obj->y;
+      step(aux);
+      posaux.x=aux->x;
+      posaux.y=aux->y;
+      if (aux->obj->sprite_index!=NULL){
       SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      }
       }
     }else{
       aux=aux->next;
       if (aux->active==true){
-      step(aux->obj,aux->x,aux->y);
-      posaux.x=aux->obj->x;
-      posaux.y=aux->obj->y;
+      step(aux);
+      posaux.x=aux->x;
+      posaux.y=aux->y;
+      if (aux->obj->sprite_index!=NULL){
       SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      }
       }
     }
   }
