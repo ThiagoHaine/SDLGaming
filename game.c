@@ -3,6 +3,7 @@
 #include"SDG.h"
 
 int main(){
+initSDG();
 scene *room = initScene(640,480,640,480);
 font *txt=newFont("font.ttf",48);
 sprite *spr_block=new_sprite("sprites/block.png",1);
@@ -40,6 +41,6 @@ while(1){
     drawText("Testando a escrita de textos",txt,room);
   drawScene(room,main_camera,"jogo de testes");
 }
-SDL_Quit();
+quitSDG();
 return 1;
 }

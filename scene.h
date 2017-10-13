@@ -7,14 +7,6 @@ void changeBackground(char * bg_file,bool fix,scene *scn){
 }
 
 scene *initScene(int width,int height,int window_width,int window_height){
-  SDL_Init(SDL_INIT_VIDEO);
-  TTF_Init();
-  int flags=IMG_INIT_JPG|IMG_INIT_PNG;
-  int initted=IMG_Init(flags);
-  if((initted&flags) != flags) {
-      printf("IMG_Init: Failed to init required jpg and png support!\n");
-      printf("IMG_Init: %s\n", IMG_GetError());
-  }
   scene *aux;
   aux=(scene*)malloc(sizeof(scene));
   aux->screen=SDL_SetVideoMode(window_width, window_height, 16, SDL_SWSURFACE);
