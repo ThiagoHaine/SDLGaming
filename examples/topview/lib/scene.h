@@ -1,14 +1,32 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
 
-void changeBackground(char * bg_file,bool fix,scene *scn){
+typedef struct scene{
+int idmax;
+SDL_Surface * background;
+SDL_Surface * screen;
+SDL_Event event;
+int bufferSize;
+struct sceneElement *init;
+struct sceneElement *end;
+}scene;
+
+typedef struct sceneElement{
+int id;
+object *obj;
+bool active;
+int x;
+int y;
+struct sceneElement *prev;
+struct sceneElement *next;
+}sceneElement;
+
+void changeBackground(char * bg_file,scene *scn){
   scn->background=IMG_Load(bg_file);
-  scn->fixed=fix;
 }
 
-scene *initScene(int width,int height,int window_width,int window_height){
+scene *initScene(int width,int height){
   SDL_Init(SDL_INIT_VIDEO);
-  TTF_Init();
   int flags=IMG_INIT_JPG|IMG_INIT_PNG;
   int initted=IMG_Init(flags);
   if((initted&flags) != flags) {
@@ -17,25 +35,12 @@ scene *initScene(int width,int height,int window_width,int window_height){
   }
   scene *aux;
   aux=(scene*)malloc(sizeof(scene));
-  aux->screen=SDL_SetVideoMode(window_width, window_height, 16, SDL_SWSURFACE);
-  aux->video=SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+  aux->screen=SDL_SetVideoMode(width, height, 16, SDL_SWSURFACE);
   aux->background=NULL;
-  aux->fixed=false;
   aux->init=NULL;
   aux->end=NULL;
   aux->idmax=0;
   aux->bufferSize=0;
-  return aux;
-}
-
-camera *newCamera(int wview,int hview,sceneElement *act){
-  camera *aux;
-  aux=(camera*)malloc(sizeof(camera));
-  aux->x=0;
-  aux->y=0;
-  aux->actor=act;
-  aux->w=wview;
-  aux->h=hview;
   return aux;
 }
 
@@ -85,33 +90,10 @@ SDL_Event sceneEvent(scene *scn){
   return scn->event;
 }
 
-void drawScene(scene *scn,camera *cmr,char *name){
-  SDL_WM_SetCaption(name, name);
+void drawScene(scene *scn){
   SDL_FillRect(scn->screen, NULL, 0x0);
-  SDL_FillRect(scn->video, NULL, 0x0);
-  if (cmr->actor!=NULL){
-    cmr->x=cmr->actor->x-(cmr->w/2);
-    cmr->y=cmr->actor->y-(cmr->h/2);
-  }
-  if (cmr->x<0){
-    cmr->x=0;
-  }
-  if (cmr->y<0){
-    cmr->y=0;
-  }
-  if ((cmr->x+cmr->w)>scn->video->w){
-    cmr->x=scn->video->w-cmr->w;
-  }
-  if ((cmr->y+cmr->h)>scn->video->h){
-    cmr->y=scn->video->h-cmr->h;
-  }
-  SDL_Rect auxrect = {cmr->x,cmr->y,(cmr->w+cmr->x),(cmr->h+cmr->y)};
   if (scn->background!=NULL){
-    if (scn->fixed==false){
-      SDL_BlitSurface(scn->background, NULL, scn->video, NULL);
-    }else{
-      SDL_BlitSurface(scn->background, NULL, scn->video, &auxrect);
-    }
+  SDL_BlitSurface(scn->background, NULL, scn->screen, NULL);
   }
   if (scn->bufferSize>0){
   sceneElement *aux;
@@ -120,27 +102,22 @@ void drawScene(scene *scn,camera *cmr,char *name){
     if (i==0){
       aux=scn->init;
       if (aux->active==true){
-      step(aux);
-      posaux.x=aux->x;
-      posaux.y=aux->y;
-      if (aux->obj->sprite_index!=NULL){
-      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
-      }
+      step(aux->obj,aux->x,aux->y);
+      posaux.x=aux->obj->x;
+      posaux.y=aux->obj->y;
+      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->screen, &posaux);
       }
     }else{
       aux=aux->next;
       if (aux->active==true){
-      step(aux);
-      posaux.x=aux->x;
-      posaux.y=aux->y;
-      if (aux->obj->sprite_index!=NULL){
-      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
-      }
+      step(aux->obj,aux->x,aux->y);
+      posaux.x=aux->obj->x;
+      posaux.y=aux->obj->y;
+      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->screen, &posaux);
       }
     }
   }
 }
-  SDL_BlitSurface(scn->video, &auxrect, scn->screen, NULL);
   SDL_UpdateRect(scn->screen, 0,0,0,0);
   SDL_Delay(1);
 }

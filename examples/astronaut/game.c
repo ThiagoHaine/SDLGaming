@@ -9,8 +9,8 @@
 
 
 int main(){
-  scene *room = initScene(640,480);
-  changeBackground("wallpaper.png",room);
+  scene *room = initScene(1000,480,640,480);
+  changeBackground("wallpaper.png",true,room);
   //player
   //VARS
   bool playerInGround=false;
@@ -30,7 +30,7 @@ int main(){
   add_subimg(player_walk_left,"sprites/left/2.png");
   //CRIA O OBJETO
   object *player=new_object("player",player_idle_right);
-  player->gravity=0.05;
+  player->gravity=0.1;
   object *shot;
   sceneElement *iShot;
 
@@ -38,21 +38,23 @@ int main(){
   //SPRITE
   sprite *spr_block=new_sprite("block.png",1);
   //OBJETO
-  object *block[40];
-  sceneElement *iBlock[40];
-  for(int i=0;i<40;i++){
+  object *block[50];
+  sceneElement *iBlock[50];
+  for(int i=0;i<50;i++){
   block[i]=new_object("block",spr_block);
   }
-  sceneElement *iPlayer=instantiate(player,room,30,30);
-  for(int i=0;i<20;i++){
+
+  for(int i=0;i<32;i++){
   iBlock[i]=instantiate(block[i],room,0+(32*i),448);
   }
   for(int i=0;i<10;i++){
-  iBlock[i+20]=instantiate(block[i+20],room,0+(32*i),250);
-  }  
+  iBlock[i+32]=instantiate(block[i+32],room,200+(32*i),250);
+  }
+  sceneElement *iPlayer=instantiate(player,room,30,30);
+  camera *cmr=newCamera(640,480,iPlayer);
   while(1){
   if (playerInGround==false){
-    player->gravity=0.05;
+    player->gravity=0.1;
   }else{
     player->gravity=0;
   }
@@ -64,20 +66,20 @@ int main(){
       if (playerShot==0){
       if (sceneEvent(room).key.keysym.sym==SDLK_LEFT){
         playerSide=0;
-        player->hspeed=-1;
+        player->hspeed=-3;
       }
       if (sceneEvent(room).key.keysym.sym==SDLK_RIGHT){
         playerSide=1;
-        player->hspeed=1;
+        player->hspeed=3;
       }}
       if (sceneEvent(room).key.keysym.sym==SDLK_UP){
-        if (playerJump==0 && playerShot==0){
-        player->y-=100;
-        player->vspeed=-4;
+        if (playerJump<2 && playerShot==0){
+        //player->y-=100;
+        player->vspeed=-5;
         if (playerInGround==true){
           playerInGround=false;
         }
-        playerJump=1;
+        playerJump++;
         }
       }
       if (sceneEvent(room).key.keysym.sym==SDLK_z){
@@ -106,12 +108,9 @@ int main(){
     }
   }
   if (playerShot==1){
-    if (wait(player,20)==true){
-      destroy(iShot,room);
-      destroy_object(shot);
+    if (wait(player,15)==true){
       playerShot=0;
     }
-    player->hspeed=0;
     switch (playerSide) {
       case 1:
         player->sprite_index=player_shot_right;
@@ -145,13 +144,13 @@ int main(){
   }
 
 
-  for(int i=0;i<30;i++){
+  for(int i=0;i<50;i++){
     if (collision_check(player,block[i])==true){
-      if (block[i]->y<player->y){
-        player->vspeed=1;
-      }else{
+      if (block[i]->y>(player->y+52)){
       if(playerInGround==false){
+        if (player->vspeed>0){
         player->vspeed=0;
+        }
         playerJump=0;
       }
       playerInGround=true;}
@@ -162,7 +161,7 @@ int main(){
 
 
 
-  drawScene(room);
+  drawScene(room,cmr);
   }
   SDL_Quit();
   return 1;
