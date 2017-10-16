@@ -32,6 +32,7 @@ int id;
 struct object *obj;
 bool active;
 int x;
+int img;
 int y;
 struct sceneElement *prev;
 struct sceneElement *next;
