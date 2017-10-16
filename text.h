@@ -8,10 +8,38 @@ font *newFont(char *font_file,int size){
   return aux;
 }
 
-void drawText(char *string,font *text_font, scene *scn){
+sprite *newText(char *string,font *text_font){
      SDL_Surface *text;
      SDL_Color text_color={255,255,255};
      text = TTF_RenderText_Solid(text_font->font, string, text_color);
-     SDL_BlitSurface(text, NULL, scn->video, NULL);
+     sprite *aux;
+     subimg *subaux;
+     aux=(sprite*)malloc(sizeof(sprite));
+     subaux=(subimg*)malloc(sizeof(subimg));
+     subaux->img=text;
+     subaux->prox=NULL;
+     aux->size=1;
+     aux->sub=1;
+     aux->time=0;
+     aux->speed=1;
+     aux->start=subaux;
+     aux->last=subaux;
+     return aux;
+}
+
+void addTextSequence(sprite *spr,char *string,font *text_font,int spd){
+  SDL_Surface *text;
+  SDL_Color text_color={255,255,255};
+  text = TTF_RenderText_Solid(text_font->font, string, text_color);
+  spr->size++;
+  spr->speed=spd*10;
+  subimg *aux;
+  subimg *new_sub;
+  new_sub=(subimg*)malloc(sizeof(subimg));
+  new_sub->img=text;
+  new_sub->prox=NULL;
+  aux=spr->last;
+  aux->prox=new_sub;
+  spr->last=new_sub;
 }
 #endif // TEXT_H_INCLUDED
