@@ -1,6 +1,20 @@
 #ifndef OBJECT_H_INCLUDED
 #define OBJECT_H_INCLUDED
 
+typedef enum { false, true } bool;
+
+typedef struct object{
+SDL_Rect pos;
+int x;
+int time;
+int y;
+float hspeed;
+float gravity;
+sprite *sprite_index;
+float vspeed;
+char name[10];
+}object;
+
 object *new_object(char *name,sprite *spr){
   object *obj;
   obj=(object*)malloc(sizeof(object));
@@ -10,6 +24,8 @@ object *new_object(char *name,sprite *spr){
   obj->time=0;
   obj->sprite_index=spr;
   strcpy(obj->name,name);
+  obj->pos.x=0;
+  obj->pos.y=0;
   return obj;
 }
 
@@ -17,26 +33,33 @@ void destroy_object(object *obj){
   free(obj);
 }
 
-void step(sceneElement *inst){
-  if (inst->obj->gravity!=0){
-    inst->obj->vspeed+=inst->obj->gravity;
+void step(object *obj,int x,int y){
+  if (obj->gravity!=0){
+    obj->vspeed+=obj->gravity;
   }
-  inst->x+=inst->obj->hspeed;
-  inst->y+=inst->obj->vspeed;
+  obj->pos.x+=obj->hspeed;
+  obj->pos.y+=obj->vspeed;
+  x+=obj->pos.x;
+  obj->x=x;
+  y+=obj->pos.y;
+  obj->y=y;
+  SDL_Rect aux;
+  aux.x=x;
+  aux.y=y;
 }
 
-bool collision_check(sceneElement *obj1,sceneElement *obj2){
+bool collision_check(object *obj1,object *obj2){
   int x1,y1,w1,h1;
   int x2,y2,w2,h2;
   x1=obj1->x;
   y1=obj1->y;
-  w1=get_image(obj1->obj->sprite_index)->w;
-  h1=get_image(obj1->obj->sprite_index)->h;
+  w1=get_image(obj1->sprite_index)->w;
+  h1=get_image(obj1->sprite_index)->h;
 
   x2=obj2->x;
   y2=obj2->y;
-  w2=get_image(obj2->obj->sprite_index)->w;
-  h2=get_image(obj2->obj->sprite_index)->h;
+  w2=get_image(obj2->sprite_index)->w;
+  h2=get_image(obj2->sprite_index)->h;
 
   if ((x2>=x1 && x2<=(x1+w1)) && (y2>=y1 && y2<=(y1+h1))){
     return true;
