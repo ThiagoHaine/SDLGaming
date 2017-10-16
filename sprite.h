@@ -53,4 +53,19 @@ SDL_Surface *get_image(sprite *spr){
   }
   return aux->img;
 }
+
+SDL_Surface *getSubimage(sprite *spr,int i){
+
+  int atual=0;
+  subimg *aux;
+  while(atual<i){
+    if (atual==0){
+      aux=spr->start;
+    }else{
+      aux=aux->prox;
+    }
+    atual++;
+  }
+  return aux->img;
+}
 #endif // SPRITE_H_INCLUDED

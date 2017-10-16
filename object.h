@@ -13,6 +13,10 @@ object *new_object(char *name,sprite *spr){
   return obj;
 }
 
+void setSubimage(object *obj,int i){
+  obj->sprite_index->sub=i;
+}
+
 void destroy_object(object *obj){
   free(obj);
 }

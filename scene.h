@@ -45,6 +45,7 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->obj=obj;
     aux->id=scn->idmax;
     aux->x=x;
+    aux->img=-1;
     aux->y=y;
     aux->active=true;
     aux->prev=NULL;
@@ -58,6 +59,43 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     scn->end->next=aux;
     scn->end=aux;
     scn->idmax++;
+    aux->img=-1;
+    aux->active=true;
+    aux->obj=obj;
+    aux->id=scn->idmax;
+    aux->x=x;
+    aux->y=y;
+    aux->next=NULL;
+    scn->bufferSize++;
+    return aux;
+  }
+}
+
+sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
+  if (scn->bufferSize==0){
+    sceneElement *aux;
+    aux=(sceneElement*)malloc(sizeof(sceneElement));
+    scn->idmax++;
+    scn->init=aux;
+    scn->end=aux;
+    aux->obj=obj;
+    aux->id=scn->idmax;
+    aux->x=x;
+    aux->img=i;
+    aux->y=y;
+    aux->active=true;
+    aux->prev=NULL;
+    aux->next=NULL;
+    scn->bufferSize++;
+    return aux;
+  }else{
+    sceneElement *aux;
+    aux=(sceneElement*)malloc(sizeof(sceneElement));
+    aux->prev=scn->end;
+    scn->end->next=aux;
+    scn->end=aux;
+    scn->idmax++;
+    aux->img=i;
     aux->active=true;
     aux->obj=obj;
     aux->id=scn->idmax;
@@ -116,7 +154,11 @@ void drawScene(scene *scn,camera *cmr,char *name){
       posaux.x=aux->x;
       posaux.y=aux->y;
       if (aux->obj->sprite_index!=NULL){
+      if (aux->img==-1){
       SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+    }else{
+      SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
+    }
       }
       }
     }else{
@@ -126,7 +168,11 @@ void drawScene(scene *scn,camera *cmr,char *name){
       posaux.x=aux->x;
       posaux.y=aux->y;
       if (aux->obj->sprite_index!=NULL){
+      if (aux->img==-1){
       SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+    }else{
+      SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
+    }
       }
       }
     }
