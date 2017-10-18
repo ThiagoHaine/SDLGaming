@@ -4,6 +4,7 @@ typedef enum { false, true } bool;
 
 typedef struct object{
 int time;
+bool solid;
 float hspeed;
 float gravity;
 struct sprite *sprite_index;
@@ -28,6 +29,7 @@ struct sceneElement *end;
 }scene;
 
 typedef struct sceneElement{
+scene *scn;
 int id;
 struct object *obj;
 bool active;
@@ -63,6 +65,7 @@ struct subimg *prox;
 
 #define keyCheck key.keysym.sym
 #define btnCheck button.button
+#define color SDL_Color
 
 #define e_quit SDL_QUIT
 #define e_keydown SDL_KEYDOWN
@@ -70,6 +73,38 @@ struct subimg *prox;
 #define e_mousedown SDL_MOUSEBUTTONDOWN
 #define e_mouseup SDL_MOUSEBUTTONUP
 #define e_mouse SDL_MOUSEMOTION
+
+//COLORS
+SDL_Color c_black={0,0,0};
+SDL_Color c_white={255,255,255};
+SDL_Color c_red={255,0,0};
+SDL_Color c_green={0,255,0};
+SDL_Color c_blue={0,0,255};
+SDL_Color c_gray={166,166,166};
+SDL_Color c_orange={255,102,0};
+SDL_Color c_pink={255,0,255};
+SDL_Color c_yellow={255,255,0};
+SDL_Color c_cyan={0,255,255};
+
+SDL_Color c_ltred={255,153,153};
+SDL_Color c_ltgreen={153,255,153};
+SDL_Color c_ltblue={153,153,255};
+SDL_Color c_ltgray={210,210,210};
+SDL_Color c_ltorange={255,194,153};
+SDL_Color c_ltpink={255,153,255};
+SDL_Color c_ltyellow={255,255,153};
+SDL_Color c_ltcyan={153,255,255};
+
+SDL_Color c_dkred={100,0,0};
+SDL_Color c_dkgreen={0,100,0};
+SDL_Color c_dkblue={0,0,100};
+SDL_Color c_dkgray={100,100,100};
+SDL_Color c_dkorange={128,51,0};
+SDL_Color c_dkpink={100,0,100};
+SDL_Color c_dkyellow={100,100,0};
+SDL_Color c_dkcyan={0,100,100};
+/////////////
+
 
 #define m_left SDL_BUTTON_LEFT
 #define m_right SDL_BUTTON_RIGHT
