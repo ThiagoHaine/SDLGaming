@@ -33,9 +33,23 @@ scene *scn;
 int id;
 struct object *obj;
 bool active;
-int x;
+
+struct sprite *sprite_index;
+int sub;
+int spr_time;
+int sprite_speed;
+
 int img;
+
+int x;
 int y;
+
+int time;
+bool solid;
+float hspeed;
+float gravity;
+float vspeed;
+
 struct sceneElement *prev;
 struct sceneElement *next;
 }sceneElement;

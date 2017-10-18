@@ -3,7 +3,7 @@
 
 sprite *newSprite(char *img_file,int spd);
 void addSubimg(sprite *spr,char *img_file);
-SDL_Surface *getImage(sprite *spr);
+SDL_Surface *getImage(sceneElement *spr);
 SDL_Surface *getSubimage(sprite *spr,int i);
 
 sprite *newSprite(char *img_file,int spd){
@@ -34,27 +34,27 @@ void addSubimg(sprite *spr,char *img_file){
   spr->last=new_sub;
 }
 
-SDL_Surface *getImage(sprite *spr){
+SDL_Surface *getImage(sceneElement *inst){
 
   int atual=0;
   subimg *aux;
-  while(atual<spr->sub){
+  while(atual<inst->sub){
     if (atual==0){
-      aux=spr->start;
+      aux=inst->sprite_index->start;
     }else{
       aux=aux->prox;
     }
     atual++;
   }
-  if (spr->time==spr->speed){
-    if (spr->sub<spr->size){
-      spr->sub++;
+  if (inst->spr_time==inst->sprite_speed){
+    if (inst->sub<inst->sprite_index->size){
+      inst->sub++;
     }else{
-      spr->sub=1;
+      inst->sub=1;
     }
-    spr->time=0;
+    inst->spr_time=0;
   }else{
-    spr->time++;
+    inst->spr_time++;
   }
   return aux->img;
 }

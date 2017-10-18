@@ -61,6 +61,18 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->active=true;
     aux->prev=NULL;
     aux->next=NULL;
+
+    aux->sub=obj->sprite_index->sub;
+    aux->spr_time=0;
+    aux->sprite_speed=obj->sprite_index->speed;
+
+    aux->sprite_index=obj->sprite_index;
+    aux->time=obj->time;
+    aux->solid=obj->solid;
+    aux->hspeed=obj->hspeed;
+    aux->gravity=obj->gravity;
+    aux->vspeed=obj->vspeed;
+
     scn->bufferSize++;
     return aux;
   }else{
@@ -78,6 +90,18 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->x=x;
     aux->y=y;
     aux->next=NULL;
+
+    aux->sub=obj->sprite_index->sub;
+    aux->spr_time=0;
+    aux->sprite_speed=obj->sprite_index->speed;
+
+    aux->sprite_index=obj->sprite_index;
+    aux->time=obj->time;
+    aux->solid=obj->solid;
+    aux->hspeed=obj->hspeed;
+    aux->gravity=obj->gravity;
+    aux->vspeed=obj->vspeed;
+
     scn->bufferSize++;
     return aux;
   }
@@ -99,6 +123,18 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->active=true;
     aux->prev=NULL;
     aux->next=NULL;
+
+    aux->sub=obj->sprite_index->sub;
+    aux->spr_time=0;
+    aux->sprite_speed=obj->sprite_index->speed;
+
+    aux->sprite_index=obj->sprite_index;
+    aux->time=obj->time;
+    aux->solid=obj->solid;
+    aux->hspeed=obj->hspeed;
+    aux->gravity=obj->gravity;
+    aux->vspeed=obj->vspeed;
+
     scn->bufferSize++;
     return aux;
   }else{
@@ -116,6 +152,18 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->x=x;
     aux->y=y;
     aux->next=NULL;
+
+    aux->sub=obj->sprite_index->sub;
+    aux->spr_time=0;
+    aux->sprite_speed=obj->sprite_index->speed;
+
+    aux->sprite_index=obj->sprite_index;
+    aux->time=obj->time;
+    aux->solid=obj->solid;
+    aux->hspeed=obj->hspeed;
+    aux->gravity=obj->gravity;
+    aux->vspeed=obj->vspeed;
+
     scn->bufferSize++;
     return aux;
   }
@@ -167,11 +215,11 @@ void drawScene(scene *scn,camera *cmr,char *name){
       step(aux);
       posaux.x=aux->x;
       posaux.y=aux->y;
-      if (aux->obj->sprite_index!=NULL){
+      if (aux->sprite_index!=NULL){
       if (aux->img==-1){
-      SDL_BlitSurface(getImage(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getImage(aux), NULL, scn->video, &posaux);
     }else{
-      SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getSubimage(aux->sprite_index,aux->img), NULL, scn->video, &posaux);
     }
       }
       }
@@ -181,11 +229,11 @@ void drawScene(scene *scn,camera *cmr,char *name){
       step(aux);
       posaux.x=aux->x;
       posaux.y=aux->y;
-      if (aux->obj->sprite_index!=NULL){
+      if (aux->sprite_index!=NULL){
       if (aux->img==-1){
-      SDL_BlitSurface(getImage(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getImage(aux), NULL, scn->video, &posaux);
     }else{
-      SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getSubimage(aux->sprite_index,aux->img), NULL, scn->video, &posaux);
     }
       }
       }

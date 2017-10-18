@@ -70,11 +70,11 @@ int room2(){
   object *obj_block=newObject("Block",spr_player);
   obj_block->solid=true;
   obj_player->gravity=0.1;
-  sceneElement *iPlayer = instantiate(obj_player,room,100,0);
+  sceneElement *player = instantiate(obj_player,room,100,0);
   instantiate(obj_block,room,288,100);
   instantiate(obj_block,room,0,100);
   for(int i=0;i<10;i++){
-  instantiate(obj_block,room,0+(i*32),132);
+  instantiate(obj_block,room,0+(i*32),468);
   }
   while(1){
     while(checkEvent(room)){
@@ -89,7 +89,7 @@ int room2(){
           right=true;
         }
         if (sceneEvent(room).keyCheck==k_up){
-          obj_player->vspeed=-2;
+          player->vspeed=-2;
         }
       }
       if (sceneEvent(room).type==e_keyup){
@@ -102,21 +102,12 @@ int room2(){
       }
     }
   if (left){
-    obj_player->hspeed=-2;
+    player->hspeed=-2;
   }else if (right){
-    obj_player->hspeed=2;
+    player->hspeed=2;
   }else{
-    obj_player->hspeed=0;
+    player->hspeed=0;
   }
-  /*if (!placeFree(iPlayer,iPlayer->x+33,iPlayer->y) && obj_player->hspeed>0){
-    obj_player->hspeed=0;
-  }
-  if (!placeFree(iPlayer,iPlayer->x-1,iPlayer->y) && obj_player->hspeed<0){
-    obj_player->hspeed=0;
-  }
-  if (!placeFree(iPlayer,iPlayer->x,iPlayer->y+32) && obj_player->vspeed>0){
-    obj_player->vspeed=0;
-  }*/
   drawScene(room,cmr,"Room2");
   }
 }
