@@ -1,6 +1,10 @@
 #ifndef TEXT_H_INCLUDED
 #define TEXT_H_INCLUDED
 
+font *newFont(char *font_file,int size);
+sprite *newText(char *string,font *text_font,SDL_Color clr);
+void addTextSequence(sprite *spr,char *string,font *text_font,int spd,SDL_Color clr);
+
 font *newFont(char *font_file,int size){
   font *aux;
   aux=(font*)malloc(sizeof(font));
@@ -8,10 +12,9 @@ font *newFont(char *font_file,int size){
   return aux;
 }
 
-sprite *newText(char *string,font *text_font){
+sprite *newText(char *string,font *text_font,SDL_Color clr){
      SDL_Surface *text;
-     SDL_Color text_color={255,255,255};
-     text = TTF_RenderText_Solid(text_font->font, string, text_color);
+     text = TTF_RenderText_Solid(text_font->font, string, clr);
      sprite *aux;
      subimg *subaux;
      aux=(sprite*)malloc(sizeof(sprite));
@@ -27,10 +30,9 @@ sprite *newText(char *string,font *text_font){
      return aux;
 }
 
-void addTextSequence(sprite *spr,char *string,font *text_font,int spd){
+void addTextSequence(sprite *spr,char *string,font *text_font,int spd,SDL_Color clr){
   SDL_Surface *text;
-  SDL_Color text_color={255,255,255};
-  text = TTF_RenderText_Solid(text_font->font, string, text_color);
+  text = TTF_RenderText_Solid(text_font->font, string, clr);
   spr->size++;
   spr->speed=spd*10;
   subimg *aux;

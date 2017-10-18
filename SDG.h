@@ -12,6 +12,9 @@
 #include "scene.h"
 #include "text.h"
 
+void initSDG();
+void quitSDG();
+
 void initSDG(){
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init();

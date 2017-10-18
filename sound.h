@@ -11,6 +11,13 @@ Mix_Music *audio;
 int channel;
 }music;
 
+void audioStart(int audio_rate,Uint16 audio_format,int audio_channels);
+sound *addSound(char *file);
+music *addMusic(char *file);
+void soundPlay(sound *snd);
+void musicPlay(music *snd,int times);
+bool soundIsPlaying(sound *snd);
+
 void audioStart(int audio_rate,Uint16 audio_format,int audio_channels){
   if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, 4096) != 0) {
    printf("Nao foi possivel inicializar o sistema de audio: %s\n", Mix_GetError());

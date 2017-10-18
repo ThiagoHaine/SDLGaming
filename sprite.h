@@ -1,7 +1,12 @@
 #ifndef SPRITE_H_INCLUDED
 #define SPRITE_H_INCLUDED
 
-sprite *new_sprite(char *img_file,int spd){
+sprite *newSprite(char *img_file,int spd);
+void addSubimg(sprite *spr,char *img_file);
+SDL_Surface *getImage(sprite *spr);
+SDL_Surface *getSubimage(sprite *spr,int i);
+
+sprite *newSprite(char *img_file,int spd){
   sprite *aux;
   subimg *subaux;
   aux=(sprite*)malloc(sizeof(sprite));
@@ -17,7 +22,7 @@ sprite *new_sprite(char *img_file,int spd){
   return aux;
 }
 
-void add_subimg(sprite *spr,char *img_file){
+void addSubimg(sprite *spr,char *img_file){
   spr->size++;
   subimg *aux;
   subimg *new_sub;
@@ -29,7 +34,7 @@ void add_subimg(sprite *spr,char *img_file){
   spr->last=new_sub;
 }
 
-SDL_Surface *get_image(sprite *spr){
+SDL_Surface *getImage(sprite *spr){
 
   int atual=0;
   subimg *aux;

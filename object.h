@@ -10,6 +10,7 @@ bool collisionCheckPosition(sceneElement *obj2,int x,int y);
 bool placeFree(sceneElement *obj,int x,int y);
 bool wait(object *obj,int time);
 
+
 object *newObject(char *name,sprite *spr){
   object *obj;
   obj=(object*)malloc(sizeof(object));

@@ -1,6 +1,16 @@
 #ifndef SCENE_H_INCLUDED
 #define SCENE_H_INCLUDED
 
+void changeBackground(char * bg_file,bool fix,scene *scn);
+scene *initScene(int width,int height,int window_width,int window_height);
+camera *newCamera(int wview,int hview,sceneElement *act);
+int checkEvent(scene *scn);
+sceneElement *instantiate(object *obj,scene *scn,int x,int y);
+sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i);
+void destroy(sceneElement *instance,scene *scn);
+SDL_Event sceneEvent(scene *scn);
+void drawScene(scene *scn,camera *cmr,char *name);
+
 void changeBackground(char * bg_file,bool fix,scene *scn){
   scn->background=IMG_Load(bg_file);
   scn->fixed=fix;
@@ -45,6 +55,7 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->obj=obj;
     aux->id=scn->idmax;
     aux->x=x;
+    aux->scn=scn;
     aux->img=-1;
     aux->y=y;
     aux->active=true;
@@ -61,6 +72,7 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     scn->idmax++;
     aux->img=-1;
     aux->active=true;
+    aux->scn=scn;
     aux->obj=obj;
     aux->id=scn->idmax;
     aux->x=x;
@@ -82,6 +94,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->id=scn->idmax;
     aux->x=x;
     aux->img=i;
+    aux->scn=scn;
     aux->y=y;
     aux->active=true;
     aux->prev=NULL;
@@ -96,6 +109,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     scn->end=aux;
     scn->idmax++;
     aux->img=i;
+    aux->scn=scn;
     aux->active=true;
     aux->obj=obj;
     aux->id=scn->idmax;
@@ -155,7 +169,7 @@ void drawScene(scene *scn,camera *cmr,char *name){
       posaux.y=aux->y;
       if (aux->obj->sprite_index!=NULL){
       if (aux->img==-1){
-      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getImage(aux->obj->sprite_index), NULL, scn->video, &posaux);
     }else{
       SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
     }
@@ -169,7 +183,7 @@ void drawScene(scene *scn,camera *cmr,char *name){
       posaux.y=aux->y;
       if (aux->obj->sprite_index!=NULL){
       if (aux->img==-1){
-      SDL_BlitSurface(get_image(aux->obj->sprite_index), NULL, scn->video, &posaux);
+      SDL_BlitSurface(getImage(aux->obj->sprite_index), NULL, scn->video, &posaux);
     }else{
       SDL_BlitSurface(getSubimage(aux->obj->sprite_index,aux->img), NULL, scn->video, &posaux);
     }
