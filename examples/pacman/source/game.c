@@ -69,9 +69,11 @@ int room1(){
 
 int room2(){
   font *fnt_pts=newFont("font.ttf",16);
-  sound *snd_normal=addSound("music/normal.wav");
-  music *snd_point=addMusic("music/point.wav");
+  sound *snd_normal=addSound("music/chomp.wav");
+  music *msc_normal=addMusic("music/nochomp.wav");
+  music *msc_ghost=addMusic("music/phantom.wav");
   sound *snd_cherry=addSound("music/cherry.wav");
+  sound *snd_ghost=addSound("music/chomp-g.wav");
   sound *snd_die=addSound("music/die.wav");
   char pts[4];
   scene *room=initScene(672,512,672,512);
@@ -80,6 +82,7 @@ int room2(){
   sprite *spr_player=newSprite("sprites/block.png",1);
   int points=0;
   sprintf(pts,"%d",points);
+  bool die=false;
   sprite *txt_points=newText(pts,fnt_pts,c_black);
   object *obj_pts=newObject("pts",txt_points);
   sprite *spr_fruit=newSprite("pacman/fruit.png",1);
@@ -102,13 +105,15 @@ int room2(){
   sprite *spr_pleft=newSprite("pacman/phantom/2.png",1);
   sprite *spr_pdown=newSprite("pacman/phantom/3.png",1);
   sprite *spr_pup=newSprite("pacman/phantom/4.png",1);
+  sprite *spr_pblue=newSprite("pacman/phantom/blue.png",1);
   object *obj_phantom=newObject("phantom",spr_pright);
   sceneElement *phantom[5];
+  bool blue=false;
   int act[5];
   for(int i=0;i<5;i++){
     phantom[i]=instantiate(obj_phantom,room,256+(32*i),288);
   }
-
+  musicPlay(msc_normal,-1);
   sceneElement *player = instantiate(obj_player,room,32,32);
 
   for(int i=0;i<20;i++){
@@ -196,6 +201,8 @@ int room2(){
   }
   instantiate(obj_pts,room,10,10);
   while(1){
+      Mix_VolumeMusic(MIX_MAX_VOLUME/5);
+  Mix_Volume(-1,MIX_MAX_VOLUME/3);
     while(checkEvent(room)){
       if (sceneEvent(room).type==e_keydown){
         if (sceneEvent(room).keyCheck==k_esc){
@@ -228,12 +235,12 @@ int room2(){
       }
     }
   if (!instanceExists("fruit",room)){
-  if (wait(player,5)){
+  if (wait(player,5,0)){
     instantiate(obj_fruit,room,320,192);
   }
   }
   for(int i=0;i<5;i++){
-    if (wait(phantom[i],1)){
+    if (wait(phantom[i],1,0)){
       act[i]=randomize(4)+1;
     }
     if (phantom[i]->hspeed==0 && phantom[i]->vspeed==0){
@@ -260,6 +267,7 @@ int room2(){
             phantom[i]->vspeed=2;
           }
     }
+    if (blue==false){
     if (phantom[i]->hspeed<0){
       phantom[i]->sprite_index=spr_pleft;
     }else if (phantom[i]->hspeed>0){
@@ -268,7 +276,17 @@ int room2(){
       phantom[i]->sprite_index=spr_pdown;
     }else{
       phantom[i]->sprite_index=spr_pup;
+    }}else{
+      if (phantom[i]->sprite_index!=spr_pblue){
+      phantom[i]->sprite_index=spr_pblue;  
+      phantom[i]->time[1]=0;
     }
+      if (wait(phantom[i],10,1)){
+        blue=false;
+        musicPlay(msc_normal,-1);
+      }
+    }
+
     if (phantom[i]->x<-32 && phantom[i]->hspeed<0){
       phantom[i]->x=672;
     }
@@ -310,7 +328,9 @@ int room2(){
   }
 
   if (collisionCheckName(player,"Point")!=NULL){
-
+    if (!soundIsPlaying(snd_normal)){
+      soundPlay(snd_normal);
+    }
     destroy(other);
     points+=10;
     sprintf(pts,"%d",points);
@@ -318,13 +338,20 @@ int room2(){
   }
   if (collisionCheckName(player,"fruit")!=NULL){
     soundPlay(snd_cherry);
+    musicPlay(msc_ghost,-1);
+    blue=true;
     destroy(other);
     points+=500;
     sprintf(pts,"%d",points);
     updateText(txt_points,pts,fnt_pts,c_black);
   }
   if (collisionCheckName(player,"phantom")!=NULL){
+    if (other->sprite_index!=spr_pblue){
     return 0;
+    }else{
+      soundPlay(snd_ghost);
+      destroy(other);
+    }
   }
   if (!instanceExists("Point",room) && !instanceExists("fruit",room)){
     return 1;

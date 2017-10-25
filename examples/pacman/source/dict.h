@@ -44,7 +44,7 @@ int id;
 struct object *obj;
 bool active;
 
-time_t now;
+time_t now[5];
 struct tm *tm;
 
 struct sprite *sprite_index;
@@ -59,7 +59,7 @@ int img;
 int x;
 int y;
 
-int time;
+int time[5];
 bool solid;
 float hspeed;
 float gravity;
@@ -103,12 +103,12 @@ struct subimg *prox;
 #define e_mouseup SDL_MOUSEBUTTONUP
 #define e_mouse SDL_MOUSEMOTION
 
-int updateTime(sceneElement *obj){
+int updateTime(sceneElement *obj,int n){
   time_t aux;
-  aux=obj->now;
-  obj->now=time(0);
-  obj->tm=localtime(&obj->now);
-  if (aux==obj->now){
+  aux=obj->now[n];
+  obj->now[n]=time(0);
+  obj->tm=localtime(&obj->now[n]);
+  if (aux==obj->now[n]){
     return 0;
   }else{
     return 1;

@@ -85,7 +85,11 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -115,7 +119,11 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -149,7 +157,11 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -179,7 +191,11 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -202,6 +218,9 @@ void drawScene(scene *scn,camera *cmr,char *name){
   SDL_WM_SetCaption(name, name);
   SDL_FillRect(scn->screen, NULL, 0x0);
   SDL_FillRect(scn->video, NULL, 0x0);
+  #ifdef _WIN32
+  CalcFPS();
+  #endif  
   if (cmr->actor!=NULL){
     cmr->x=cmr->actor->x-(cmr->w/2);
     cmr->y=cmr->actor->y-(cmr->h/2);
