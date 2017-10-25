@@ -16,6 +16,16 @@ typedef struct font{
 TTF_Font *font;
 }font;
 
+typedef struct sound{
+Mix_Chunk *audio;
+int channel;
+}sound;
+
+typedef struct music{
+Mix_Music *audio;
+int channel;
+}music;
+
 typedef struct scene{
 int idmax;
 SDL_Surface * background;

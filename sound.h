@@ -1,28 +1,12 @@
 #ifndef SOUND_H_INCLUDED
 #define SOUND_H_INCLUDED
 
-typedef struct sound{
-Mix_Chunk *audio;
-int channel;
-}sound;
 
-typedef struct music{
-Mix_Music *audio;
-int channel;
-}music;
-
-void audioStart(int audio_rate,Uint16 audio_format,int audio_channels);
 sound *addSound(char *file);
 music *addMusic(char *file);
 void soundPlay(sound *snd);
 void musicPlay(music *snd,int times);
 bool soundIsPlaying(sound *snd);
-
-void audioStart(int audio_rate,Uint16 audio_format,int audio_channels){
-  if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, 4096) != 0) {
-   printf("Nao foi possivel inicializar o sistema de audio: %s\n", Mix_GetError());
-  }
-}
 
 sound *addSound(char *file){
 sound *aux;
@@ -68,4 +52,21 @@ bool soundIsPlaying(sound *snd){
   }
 }
 
+bool musicIsPlaying(){
+  if (Mix_PlayingMusic()==0){
+    return false;
+  }else{
+    return true;
+  }
+}
+
+void soundStop(sound *snd){
+  if (soundIsPlaying(snd)){
+    Mix_HaltChannel(snd->channel);
+  }
+}
+
+void musicStop(){
+  Mix_HaltMusic();
+}
 #endif // SOUND_H_INCLUDED

@@ -9,6 +9,7 @@ int room2();
 
 int main(){
 initSDG();
+
 switch(room1()){
   case 0:
     room2();
@@ -19,12 +20,14 @@ return 1;
 }
 
 int room1(){
+  music *msc_opening=addMusic("music/opening.mp3");
+  musicPlay(msc_opening,0);
   scene *room=initScene(640,480,640,480);
   camera *cmr=newCamera(640,480,NULL);
   int menu=0,go=1;
   font *fnt_logo=newFont("font.ttf",48);
   font *fnt_menu=newFont("font.ttf",16);
-  sprite *spr_logo=newText("Exemplo",fnt_logo,c_white);
+  sprite *spr_logo=newText("Pacman",fnt_logo,c_white);
   sprite *spr_menu=newText("-----Menu-----",fnt_menu,c_white);
   addTextSequence(spr_menu,"Start",fnt_menu,1,c_dkorange);
   addTextSequence(spr_menu,"Config",fnt_menu,1,c_blue);
@@ -55,6 +58,7 @@ int room1(){
           menu=2;
         }
       }else if (sceneEvent(room).keyCheck==k_enter){
+          musicStop();
           return menu;
       }
     }
@@ -65,6 +69,10 @@ int room1(){
 
 int room2(){
   font *fnt_pts=newFont("font.ttf",16);
+  sound *snd_normal=addSound("music/normal.wav");
+  music *snd_point=addMusic("music/point.wav");
+  sound *snd_cherry=addSound("music/cherry.wav");
+  sound *snd_die=addSound("music/die.wav");
   char pts[4];
   scene *room=initScene(672,512,672,512);
   camera *cmr=newCamera(672,512,NULL);
@@ -302,12 +310,14 @@ int room2(){
   }
 
   if (collisionCheckName(player,"Point")!=NULL){
+
     destroy(other);
     points+=10;
     sprintf(pts,"%d",points);
     updateText(txt_points,pts,fnt_pts,c_black);
   }
   if (collisionCheckName(player,"fruit")!=NULL){
+    soundPlay(snd_cherry);
     destroy(other);
     points+=500;
     sprintf(pts,"%d",points);
@@ -317,7 +327,6 @@ int room2(){
     return 0;
   }
   if (!instanceExists("Point",room) && !instanceExists("fruit",room)){
-    printf("Você ganhou!");
     return 1;
   }
   drawScene(room,cmr,"Room2");

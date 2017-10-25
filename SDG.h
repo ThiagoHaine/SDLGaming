@@ -8,6 +8,7 @@
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_mixer.h"
 #include "dict.h"
+#include "sound.h"
 #include "sprite.h"
 #include "object.h"
 #include "scene.h"
@@ -27,6 +28,7 @@ void initSDG(){
       printf("IMG_Init: Failed to init required jpg and png support!\n");
       printf("IMG_Init: %s\n", IMG_GetError());
   }
+  Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 4096);
 }
 
 void quitSDG(){
