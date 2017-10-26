@@ -212,4 +212,23 @@ SDL_Color c_dkcyan={0,100,100};
 #define k_rctrl SDLK_RCTRL
 #define k_lshift SDLK_LSHIFT
 #define k_rshift SDLK_RSHIFT
+
+int fps=30;
+int fps_aux=0;
+time_t fps_now;
+struct tm *fps_tm;
+
+void calcFPS(){
+    int fps_sec=fps_tm->tm_sec;
+  fps_now=time(0);
+  fps_tm = localtime(&fps_now);
+  if (fps_sec!=(fps_tm->tm_sec)){
+    fps=fps_aux;
+    fps_aux=0;
+    printf("%d",fps);
+  }else{
+    fps_aux++;
+  }
+}
+
 #endif // DICT_H_INCLUDED

@@ -17,6 +17,7 @@ void changeBackground(char * bg_file,bool fix,scene *scn){
 }
 
 scene *initScene(int width,int height,int window_width,int window_height){
+  fps=30;
   scene *aux;
   aux=(scene*)malloc(sizeof(scene));
   aux->screen=SDL_SetVideoMode(window_width, window_height, 16, SDL_SWSURFACE);
@@ -218,9 +219,6 @@ void drawScene(scene *scn,camera *cmr,char *name){
   SDL_WM_SetCaption(name, name);
   SDL_FillRect(scn->screen, NULL, 0x0);
   SDL_FillRect(scn->video, NULL, 0x0);
-  #ifdef _WIN32
-  CalcFPS();
-  #endif  
   if (cmr->actor!=NULL){
     cmr->x=cmr->actor->x-(cmr->w/2);
     cmr->y=cmr->actor->y-(cmr->h/2);

@@ -17,33 +17,11 @@
 void initSDG();
 void quitSDG();
 
-#ifdef _WIN32
-ULONG lastTick=GetTickCount(),currTick=GetTickCount();
-ULONG UPDATESPEED;
-UINT frames=0;
-float fps=60.0f;
-float g_speed;
-
-void CalcFPS()
-{
-  currTick=GetTickCount();
-  ULONG tickDiff=currTick-lastTick;
-  frames++;
-  if(tickDiff>=UPDATESPEED)
-    {
-      lastTick=currTick;
-      float calcVal=1/((float)UPDATESPEED/1000.0f);   // Inverse
-      float fpsCalc=(float)frames*calcVal;        // Calculates our frames in one second
-      fps+=fpsCalc;
-      fps/=2;
-      frames=0;
-      g_speed=60/fps;
-    }
-}
-#endif
 
 void initSDG(){
   srand(time(NULL));
+  fps_now=time(0);
+  fps_tm = localtime(&fps_now);
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init();
   int flags=IMG_INIT_JPG|IMG_INIT_PNG;

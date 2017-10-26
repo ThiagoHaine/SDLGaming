@@ -42,6 +42,7 @@ int room1(){
   instantiateImage(obj_menu,room,250,360,4);
   sceneElement *selector=instantiateImage(obj_menu,room,230,320+(20*menu),5);
   while(go==1){
+    calcFPS();
     while(checkEvent(room)){
       if (sceneEvent(room).type==e_keyup){
         if (sceneEvent(room).keyCheck==k_down){
@@ -87,13 +88,13 @@ int room2(){
   object *obj_pts=newObject("pts",txt_points);
   sprite *spr_fruit=newSprite("pacman/fruit.png",1);
   object *obj_fruit=newObject("fruit",spr_fruit);
-  sprite *spr_right=newSprite("pacman/1.png",1);
+  sprite *spr_right=newSprite("pacman/1.png",5);
   addSubimg(spr_right,"pacman/2.png");
-  sprite *spr_left=newSprite("pacman/5.png",1);
+  sprite *spr_left=newSprite("pacman/5.png",5);
   addSubimg(spr_left,"pacman/2.png");
-  sprite *spr_up=newSprite("pacman/3.png",1);
+  sprite *spr_up=newSprite("pacman/3.png",5);
   addSubimg(spr_up,"pacman/2.png");
-  sprite *spr_down=newSprite("pacman/7.png",1);
+  sprite *spr_down=newSprite("pacman/7.png",5);
   addSubimg(spr_down,"pacman/2.png");
   sprite *spr_point=newSprite("pacman/point.png",1);
   object *obj_player=newObject("Player",spr_right);
@@ -201,6 +202,9 @@ int room2(){
   }
   instantiate(obj_pts,room,10,10);
   while(1){
+    calcFPS();
+    sprintf(pts,"%d",fps);
+    updateText(txt_points,pts,fnt_pts,c_black);
       Mix_VolumeMusic(MIX_MAX_VOLUME/5);
   Mix_Volume(-1,MIX_MAX_VOLUME/3);
     while(checkEvent(room)){
@@ -333,7 +337,8 @@ int room2(){
     }
     destroy(other);
     points+=10;
-    sprintf(pts,"%d",points);
+    //sprintf(pts,"%d",points);
+    sprintf(pts,"%d",fps);
     updateText(txt_points,pts,fnt_pts,c_black);
   }
   if (collisionCheckName(player,"fruit")!=NULL){
@@ -342,7 +347,8 @@ int room2(){
     blue=true;
     destroy(other);
     points+=500;
-    sprintf(pts,"%d",points);
+    //sprintf(pts,"%d",points);
+    sprintf(pts,"%d",fps);
     updateText(txt_points,pts,fnt_pts,c_black);
   }
   if (collisionCheckName(player,"phantom")!=NULL){
