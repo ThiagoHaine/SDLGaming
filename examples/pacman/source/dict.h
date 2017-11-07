@@ -47,6 +47,7 @@ bool active;
 time_t now[5];
 struct tm *tm;
 
+int flip;
 struct sprite *sprite_index;
 int sub;
 int spr_time;
@@ -102,6 +103,9 @@ struct subimg *prox;
 #define e_mousedown SDL_MOUSEBUTTONDOWN
 #define e_mouseup SDL_MOUSEBUTTONUP
 #define e_mouse SDL_MOUSEMOTION
+
+#define f_vertical 1
+#define f_horizontal 2
 
 int updateTime(sceneElement *obj,int n){
   time_t aux;

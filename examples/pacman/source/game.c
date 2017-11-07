@@ -302,25 +302,29 @@ int room2(){
     if (left && placeFree(player,player->x-2,player->y)){
       player->vspeed=0;
       player->hspeed=-2;
-      player->sprite_index=spr_left;
+      player->sprite_index=spr_right;
+      player->flip=f_horizontal;
       left=false;
     }
     if (right && placeFree(player,player->x+2,player->y)){
       player->vspeed=0;
       player->hspeed=2;
       player->sprite_index=spr_right;
+      player->flip=0;
       right=false;
     }
     if (up && placeFree(player,player->x,player->y-2) && player->x>0 && player->x<672){
       player->vspeed=-2;
       player->hspeed=0;
       player->sprite_index=spr_up;
+      player->flip=0;
       up=false;
     }
     if (down && placeFree(player,player->x,player->y+2) && player->x>0 && player->x<672){
       player->vspeed=2;
       player->hspeed=0;
-      player->sprite_index=spr_down;
+      player->sprite_index=spr_up;
+      player->flip=f_vertical;
       down=false;
     }
   }
