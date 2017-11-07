@@ -17,6 +17,7 @@ void changeBackground(char * bg_file,bool fix,scene *scn){
 }
 
 scene *initScene(int width,int height,int window_width,int window_height){
+  fps=30;
   scene *aux;
   aux=(scene*)malloc(sizeof(scene));
   aux->screen=SDL_SetVideoMode(window_width, window_height, 16, SDL_SWSURFACE);
@@ -83,9 +84,13 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
     aux->sprite_speed=obj->sprite_index->speed;
-
+    aux->flip=0;
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -109,13 +114,17 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->y=y;
     aux->next=NULL;
     aux->clk=0;
-
+    aux->flip=0;
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -138,7 +147,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->x=x;
     aux->img=i;
     aux->scn=scn;
-
+    aux->flip=0;
     aux->y=y;
     aux->active=true;
     aux->prev=NULL;
@@ -149,7 +158,11 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;
@@ -167,7 +180,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->img=i;
     aux->scn=scn;
     aux->active=true;
-
+    aux->flip=0;
     aux->obj=obj;
     aux->id=scn->idmax;
     aux->x=x;
@@ -179,7 +192,11 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->sprite_speed=obj->sprite_index->speed;
 
     aux->sprite_index=obj->sprite_index;
-    aux->time=obj->time;
+    aux->time[0]=0;
+    aux->time[1]=0;
+    aux->time[2]=0;
+    aux->time[3]=0;
+    aux->time[4]=0;
     aux->solid=obj->solid;
     aux->hspeed=obj->hspeed;
     aux->gravity=obj->gravity;

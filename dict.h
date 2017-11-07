@@ -44,9 +44,10 @@ int id;
 struct object *obj;
 bool active;
 
-time_t now;
+time_t now[5];
 struct tm *tm;
 
+int flip;
 struct sprite *sprite_index;
 int sub;
 int spr_time;
@@ -59,7 +60,7 @@ int img;
 int x;
 int y;
 
-int time;
+int time[5];
 bool solid;
 float hspeed;
 float gravity;
@@ -103,12 +104,15 @@ struct subimg *prox;
 #define e_mouseup SDL_MOUSEBUTTONUP
 #define e_mouse SDL_MOUSEMOTION
 
-int updateTime(sceneElement *obj){
+#define f_vertical 1
+#define f_horizontal 2
+
+int updateTime(sceneElement *obj,int n){
   time_t aux;
-  aux=obj->now;
-  obj->now=time(0);
-  obj->tm=localtime(&obj->now);
-  if (aux==obj->now){
+  aux=obj->now[n];
+  obj->now[n]=time(0);
+  obj->tm=localtime(&obj->now[n]);
+  if (aux==obj->now[n]){
     return 0;
   }else{
     return 1;
@@ -212,4 +216,23 @@ SDL_Color c_dkcyan={0,100,100};
 #define k_rctrl SDLK_RCTRL
 #define k_lshift SDLK_LSHIFT
 #define k_rshift SDLK_RSHIFT
+
+int fps=30;
+int fps_aux=0;
+time_t fps_now;
+struct tm *fps_tm;
+
+void calcFPS(){
+    int fps_sec=fps_tm->tm_sec;
+  fps_now=time(0);
+  fps_tm = localtime(&fps_now);
+  if (fps_sec!=(fps_tm->tm_sec)){
+    fps=fps_aux;
+    fps_aux=0;
+    printf("%d",fps);
+  }else{
+    fps_aux++;
+  }
+}
+
 #endif // DICT_H_INCLUDED

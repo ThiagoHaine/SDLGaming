@@ -3,6 +3,7 @@
 
 #include<string.h>
 #include<time.h>
+#include<stdint.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_image.h"
@@ -20,6 +21,8 @@ void quitSDG();
 
 void initSDG(){
   srand(time(NULL));
+  fps_now=time(0);
+  fps_tm = localtime(&fps_now);
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init();
   int flags=IMG_INIT_JPG|IMG_INIT_PNG;
@@ -37,6 +40,7 @@ void quitSDG(){
 	SDL_Quit();
 	Mix_CloseAudio();
 }
+    
 
 int randomize(int n){
 return rand() % n;

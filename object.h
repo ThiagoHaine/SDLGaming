@@ -10,7 +10,6 @@ void step(sceneElement *inst);
 bool collisionCheck(sceneElement *obj1,sceneElement *obj2);
 bool collisionCheckPosition(sceneElement *obj2,int x,int y);
 bool placeFree(sceneElement *obj,int x,int y);
-bool wait(sceneElement *obj,int time);
 
 
 object *newObject(char *name,sprite *spr){
@@ -172,14 +171,14 @@ sceneElement *collisionCheckName(sceneElement *obj,char *name){
   return NULL;
 }
 
-bool wait(sceneElement *obj,int time){
-  if (obj->time<=time){
-    if (updateTime(obj)==1){
-    obj->time++;
+bool wait(sceneElement *obj,int time,int n){
+  if (obj->time[n]<=time){
+    if (updateTime(obj,n)==1){
+    obj->time[n]++;
     }
     return false;
   }else{
-    obj->time=0;
+    obj->time[n]=0;
     return true;
   }
 }
