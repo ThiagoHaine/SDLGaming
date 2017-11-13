@@ -1,7 +1,7 @@
 #ifndef SPRITE_H_INCLUDED
 #define SPRITE_H_INCLUDED
 
-sprite *newSprite(char *img_file,int spd);
+sprite *newSprite(char *img_file);
 void addSubimg(sprite *spr,char *img_file);
 SDL_Surface *getImage(sceneElement *spr);
 SDL_Surface *getSubimage(sprite *spr,int i);
@@ -9,17 +9,22 @@ Uint32 get_pixel32( SDL_Surface *surface, int x, int y );
 void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel );
 SDL_Surface *flip_surface( SDL_Surface *surface, int flags );
 
-sprite *newSprite(char *img_file,int spd){
+sprite *newSprite(char *img_file){
   sprite *aux;
   subimg *subaux;
   aux=(sprite*)malloc(sizeof(sprite));
   subaux=(subimg*)malloc(sizeof(subimg));
-  subaux->img=IMG_Load(img_file);
+  subaux->img[0]=IMG_Load(img_file);
+  subaux->img[1]=IMG_Load(img_file);
+  subaux->img[1]=flip_surface( subaux->img[1], f_vertical );
+  subaux->img[2]=IMG_Load(img_file);
+  subaux->img[2]=flip_surface( subaux->img[2], f_horizontal );
+  subaux->img[3]=IMG_Load(img_file);
+  subaux->img[3]=flip_surface( subaux->img[3], f_horizontal | f_vertical );
   subaux->prox=NULL;
   aux->size=1;
   aux->sub=1;
   aux->time=0;
-  aux->speed=spd;
   aux->start=subaux;
   aux->last=subaux;
   return aux;
@@ -30,7 +35,13 @@ void addSubimg(sprite *spr,char *img_file){
   subimg *aux;
   subimg *new_sub;
   new_sub=(subimg*)malloc(sizeof(subimg));
-  new_sub->img=IMG_Load(img_file);
+  new_sub->img[0]=IMG_Load(img_file);
+  new_sub->img[1]=IMG_Load(img_file);
+  new_sub->img[1]=flip_surface( new_sub->img[1], f_vertical );
+  new_sub->img[2]=IMG_Load(img_file);
+  new_sub->img[2]=flip_surface( new_sub->img[2], f_horizontal );
+  new_sub->img[3]=IMG_Load(img_file);
+  new_sub->img[3]=flip_surface( new_sub->img[3], f_horizontal | f_vertical );
   new_sub->prox=NULL;
   aux=spr->last;
   aux->prox=new_sub;
@@ -62,9 +73,9 @@ SDL_Surface *getImage(sceneElement *inst){
             inst->sub=1;
           }
         }
-          return flip_surface( aux->img, inst->flip );
+          return aux->img[inst->flip];
         }else{
-          return inst->sprite_index->start->img;
+          return inst->sprite_index->start->img[inst->flip];
         }
 }
 
@@ -80,7 +91,7 @@ SDL_Surface *getSubimage(sprite *spr,int i){
     }
     atual++;
   }
-  return aux->img;
+  return aux->img[0];
 }
 
 Uint32 get_pixel32( SDL_Surface *surface, int x, int y ) { 

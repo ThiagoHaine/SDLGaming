@@ -29,10 +29,10 @@ int room1(){
   font *fnt_menu=newFont("font.ttf",16);
   sprite *spr_logo=newText("Pacman",fnt_logo,c_white);
   sprite *spr_menu=newText("-----Menu-----",fnt_menu,c_white);
-  addTextSequence(spr_menu,"Start",fnt_menu,1,c_dkorange);
-  addTextSequence(spr_menu,"Config",fnt_menu,1,c_blue);
-  addTextSequence(spr_menu,"Exit",fnt_menu,1,c_yellow);
-  addTextSequence(spr_menu,">",fnt_menu,1,c_gray);
+  addTextSequence(spr_menu,"Start",fnt_menu,c_dkorange);
+  addTextSequence(spr_menu,"Config",fnt_menu,c_blue);
+  addTextSequence(spr_menu,"Exit",fnt_menu,c_yellow);
+  addTextSequence(spr_menu,">",fnt_menu,c_gray);
   object *obj_logo=newObject("Logo",spr_logo);
   object *obj_menu=newObject("Menu",spr_menu);
   instantiate(obj_logo,room,200,100);
@@ -80,33 +80,34 @@ int room2(){
   scene *room=initScene(672,512,672,512);
   camera *cmr=newCamera(672,512,NULL);
   bool left=false,right=false,up=false,down=false;
-  sprite *spr_player=newSprite("sprites/block.png",1);
+  sprite *spr_player=newSprite("sprites/block.png");
   int points=0;
   sprintf(pts,"%d",points);
   bool die=false;
+  bool hold=false;
   sprite *txt_points=newText(pts,fnt_pts,c_black);
   object *obj_pts=newObject("pts",txt_points);
-  sprite *spr_fruit=newSprite("pacman/fruit.png",1);
+  sprite *spr_fruit=newSprite("pacman/fruit.png");
   object *obj_fruit=newObject("fruit",spr_fruit);
-  sprite *spr_right=newSprite("pacman/1.png",5);
+  sprite *spr_right=newSprite("pacman/1.png");
   addSubimg(spr_right,"pacman/2.png");
-  sprite *spr_left=newSprite("pacman/5.png",5);
+  sprite *spr_left=newSprite("pacman/5.png");
   addSubimg(spr_left,"pacman/2.png");
-  sprite *spr_up=newSprite("pacman/3.png",5);
+  sprite *spr_up=newSprite("pacman/3.png");
   addSubimg(spr_up,"pacman/2.png");
-  sprite *spr_down=newSprite("pacman/7.png",5);
+  sprite *spr_down=newSprite("pacman/7.png");
   addSubimg(spr_down,"pacman/2.png");
-  sprite *spr_point=newSprite("pacman/point.png",1);
+  sprite *spr_point=newSprite("pacman/point.png");
   object *obj_player=newObject("Player",spr_right);
   object *obj_block=newObject("Block",spr_player);
   object *obj_point=newObject("Point",spr_point);
   obj_block->solid=true;
   //FANTASMA
-  sprite *spr_pright=newSprite("pacman/phantom/1.png",1);
-  sprite *spr_pleft=newSprite("pacman/phantom/2.png",1);
-  sprite *spr_pdown=newSprite("pacman/phantom/3.png",1);
-  sprite *spr_pup=newSprite("pacman/phantom/4.png",1);
-  sprite *spr_pblue=newSprite("pacman/phantom/blue.png",1);
+  sprite *spr_pright=newSprite("pacman/phantom/1.png");
+  sprite *spr_pleft=newSprite("pacman/phantom/2.png");
+  sprite *spr_pdown=newSprite("pacman/phantom/3.png");
+  sprite *spr_pup=newSprite("pacman/phantom/4.png");
+  sprite *spr_pblue=newSprite("pacman/phantom/blue.png");
   object *obj_phantom=newObject("phantom",spr_pright);
   sceneElement *phantom[5];
   bool blue=false;
@@ -116,6 +117,7 @@ int room2(){
   }
   musicPlay(msc_normal,-1);
   sceneElement *player = instantiate(obj_player,room,32,32);
+  player->sprite_speed=5;
 
   for(int i=0;i<20;i++){
   instantiate(obj_block,room,0+(i*32),480);
@@ -202,12 +204,34 @@ int room2(){
   }
   instantiate(obj_pts,room,10,10);
   while(1){
+    if (hold==true){
+      player->x=mouse_x;
+      player->y=mouse_y;
+      player->vspeed=0;
+      player->hspeed=0;
+    }
+    if (hold==false && (player->x%32)!=0){
+      player->x--;
+    }
+    if (hold==false && (player->y%32)!=0){
+      player->y--;
+    }
     calcFPS();
     sprintf(pts,"%d",fps);
     updateText(txt_points,pts,fnt_pts,c_black);
       Mix_VolumeMusic(MIX_MAX_VOLUME/5);
   Mix_Volume(-1,MIX_MAX_VOLUME/3);
     while(checkEvent(room)){
+      if (sceneEvent(room).type==e_mousedown){
+        if (sceneEvent(room).btnCheck==m_left && collisionCheckPosition(player,mouse_x,mouse_y)){
+          hold=true;
+        }
+      }
+      if (sceneEvent(room).type==e_mouseup){
+        if (sceneEvent(room).btnCheck==m_left && hold==true){
+          hold=false;
+        }
+      }
       if (sceneEvent(room).type==e_keydown){
         if (sceneEvent(room).keyCheck==k_esc){
           return 1;

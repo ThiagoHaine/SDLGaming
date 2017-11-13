@@ -11,6 +11,9 @@ void destroy(sceneElement *instance);
 SDL_Event sceneEvent(scene *scn);
 void drawScene(scene *scn,camera *cmr,char *name);
 
+int mouse_x=0;
+int mouse_y=0;
+
 void changeBackground(char * bg_file,bool fix,scene *scn){
   scn->background=IMG_Load(bg_file);
   scn->fixed=fix;
@@ -83,7 +86,7 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->next=NULL;
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
-    aux->sprite_speed=obj->sprite_index->speed;
+    aux->sprite_speed=30;
     aux->flip=0;
     aux->sprite_index=obj->sprite_index;
     aux->time[0]=0;
@@ -117,7 +120,7 @@ sceneElement *instantiate(object *obj,scene *scn,int x,int y){
     aux->flip=0;
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
-    aux->sprite_speed=obj->sprite_index->speed;
+    aux->sprite_speed=30;
 
     aux->sprite_index=obj->sprite_index;
     aux->time[0]=0;
@@ -155,7 +158,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->clk=0;
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
-    aux->sprite_speed=obj->sprite_index->speed;
+    aux->sprite_speed=30;
 
     aux->sprite_index=obj->sprite_index;
     aux->time[0]=0;
@@ -189,7 +192,7 @@ sceneElement *instantiateImage(object *obj,scene *scn,int x,int y,int i){
     aux->clk=0;
     aux->sub=obj->sprite_index->sub;
     aux->spr_time=0;
-    aux->sprite_speed=obj->sprite_index->speed;
+    aux->sprite_speed=30;
 
     aux->sprite_index=obj->sprite_index;
     aux->time[0]=0;
@@ -219,6 +222,12 @@ void drawScene(scene *scn,camera *cmr,char *name){
   SDL_WM_SetCaption(name, name);
   SDL_FillRect(scn->screen, NULL, 0x0);
   SDL_FillRect(scn->video, NULL, 0x0);
+  if (checkEvent(scn)){
+    if (sceneEvent(scn).type==SDL_MOUSEMOTION){
+    mouse_x=sceneEvent(scn).motion.x;
+    mouse_y=sceneEvent(scn).motion.y;
+    }
+  }
   if (cmr->actor!=NULL){
     cmr->x=cmr->actor->x-(cmr->w/2);
     cmr->y=cmr->actor->y-(cmr->h/2);

@@ -81,14 +81,13 @@ typedef struct camera{
 typedef struct sprite{
 int size;
 int time;
-int speed;
 int sub;
 struct subimg *start;
 struct subimg *last;
 }sprite;
 
 typedef struct subimg{
-SDL_Surface *img;
+SDL_Surface *img[4];
 struct subimg *prox;
 }subimg;
 
